@@ -101,7 +101,9 @@ public class Main {
 
         printDragonStatus(dragonHPs, dragonDamage);
 
-        System.out.println();        if(heroWins == false) {
+        System.out.println();
+
+        if(heroWins == false) {
             String tombstone = "                  _  /)\n" +
                     "                 mo / )\n" +
                     "                 |/)\\)\n" +
