@@ -41,12 +41,8 @@ public class Main {
         int heroDamage        = scanner.nextInt();
 
         // Setup our Dragons
-        int dragon1HP = 100;
-        int dragon1Damage = 20;
-        int dragon2HP = 100;
-        int dragon2Damage = 20;
-        int dragon3HP = 100;
-        int dragon3Damage = 20;
+        int[] dragonHPs    = { 1000, 1000, 3000 };
+        int[] dragonDamage = { 200,  200,  300   };
 
         // Start the battle until all dragons are dead or hero is dead
         boolean heroWins = false;
@@ -54,12 +50,7 @@ public class Main {
             System.out.println("Hero has " + heroHP + " HP and deals " + heroDamage + " points of damage");
             System.out.println();
 
-            System.out.println("Dragons Status");
-            System.out.println("--------------");
-            System.out.println("Dragon 1 " + dragon1HP + " HP and deals " + dragon1Damage + " points of damage");
-            System.out.println("Dragon 2 " + dragon2HP + " HP and deals " + dragon2Damage + " points of damage");
-            System.out.println("Dragon 3 " + dragon3HP + " HP and deals " + dragon3Damage + " points of damage");
-            System.out.println();
+            printDragonStatus(dragonHPs, dragonDamage);
 
             // when hero hit points less than zero HP we have died
             if(heroHP < 1) {
@@ -68,7 +59,7 @@ public class Main {
             }
 
             // when all dragons have less than zero HP we win
-            if(dragon1HP < 1 && dragon2HP < 1 && dragon3HP < 1) {
+            if(dragonHPs[0] < 1 && dragonHPs[1] < 1 && dragonHPs[2] < 1) {
                 heroWins = true;
                 break;
             }
@@ -80,57 +71,26 @@ public class Main {
                 dragonChoice = scanner.nextInt();
             }
 
+            // subtract one from user input to access actual dragon
+            dragonChoice--;
+
             // Attack the dragons
             System.out.println("Attacking Dragon " + dragonChoice);
-            if(dragonChoice == 1) {
+            if(dragonHPs[dragonChoice] < 1) {
+                System.out.println("Dragon " + dragonChoice + " is already dead!");
+            } else {
+                int heroHitsForDmg = random.nextInt(heroDamage);
 
-                // if dragon is already dead tell user but they lose a turn
-                if(dragon1HP < 1) {
-                    System.out.println("Dragon 1 is already dead!");
-                } else {
-                    int heroHitsForDmg = random.nextInt(heroDamage);
-
-                    dragon1HP = dragon1HP - heroHitsForDmg;
-                }
-
-            } else if(dragonChoice == 2) {
-
-                // if dragon is already dead tell user but they lose a turn
-                if(dragon2HP < 1) {
-                    System.out.println("Dragon 2 is already dead!");
-                } else {
-                    int heroHitsForDmg = random.nextInt(heroDamage);
-
-                    dragon2HP = dragon2HP - heroHitsForDmg;
-                }
-
-            } else if(dragonChoice == 3) {
-
-                // if dragon is already dead tell user but they lose a turn
-                if (dragon3HP < 1) {
-                    System.out.println("Dragon 3 is already dead!");
-                } else {
-                    int heroHitsForDmg = random.nextInt(heroDamage);
-
-                    dragon3HP = dragon3HP - heroHitsForDmg;
-                }
-
+                dragonHPs[dragonChoice] = dragonHPs[dragonChoice] - heroHitsForDmg;
             }
+
 
             // Dragons attack Hero
-            if(dragon1HP > 0) {
-                int dragonHitsForDmg = random.nextInt(dragon1Damage);
-                heroHP = heroHP - dragonHitsForDmg;
-            }
-
-            if(dragon2HP > 0) {
-                int dragonHitsForDmg = random.nextInt(dragon2Damage);
-                heroHP = heroHP - dragonHitsForDmg;
-            }
-
-            if(dragon3HP > 0) {
-                int dragonHitsForDmg = random.nextInt(dragon3Damage);
-                heroHP = heroHP - dragonHitsForDmg;
+            for(int i = 0; i < dragonHPs.length; i++) {
+                if(dragonHPs[i] > 0) {
+                    int dragonHitsForDmg = random.nextInt(dragonDamage[i]);
+                    heroHP = heroHP - dragonHitsForDmg;
+                }
             }
         }
 
@@ -138,10 +98,10 @@ public class Main {
         System.out.println("--------------");
         System.out.println("Hero has " + heroHP + " HP and deals " + heroDamage + " points of damage");
         System.out.println();
-        System.out.println("Dragon 1 " + dragon1HP + " HP and deals " + dragon1Damage + " points of damage");
-        System.out.println("Dragon 2 " + dragon2HP + " HP and deals " + dragon2Damage + " points of damage");
-        System.out.println("Dragon 3 " + dragon3HP + " HP and deals " + dragon3Damage + " points of damage");
-        if(heroWins == false) {
+
+        printDragonStatus(dragonHPs, dragonDamage);
+
+        System.out.println();        if(heroWins == false) {
             String tombstone = "                  _  /)\n" +
                     "                 mo / )\n" +
                     "                 |/)\\)\n" +
@@ -166,6 +126,15 @@ public class Main {
             System.out.println("You were DEFEATED!");
         } else {
             System.out.println("You are a true hero you WIN!");
+        }
+    }
+
+    private static void printDragonStatus(int[] dragonHPs, int[] dragonDamage) {
+        System.out.println("Dragons Status");
+        System.out.println("--------------");
+
+        for(int i = 0; i < dragonHPs.length && i < dragonDamage.length; i++) {
+            System.out.println("Dragon " + (i+1) + " " + dragonHPs[i] + " HP and deals " + dragonDamage[i] + " points of damage");
         }
     }
 }
